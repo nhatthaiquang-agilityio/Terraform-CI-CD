@@ -3,17 +3,11 @@ parameters:
   default: ''
 - name: AzureKeyVaultServiceConnectionName
   default: '' 
-- name: AzStorageAccountsAccessKey
-  default: '' 
 - name: AzureResourceGroupName
   default: ''
 - name: StorgeAccountsName
   default: '' 
 - name: AzureContainerName
-  default: ''
-- name: TFAuth0ClientId
-  default: '' 
-- name: TFAuth0ClientSecret          
   default: ''
 - name: VarFilePath
   default: '' 
@@ -42,7 +36,7 @@ parameters:
         workingDirectory: ${{ parameters.TerraformWorkingDirectory }}
         provider: azurerm
         command: init
-        commandOptions: '-var "access_key=${{ parameters.AzStorageAccountsAccessKey }}"'
+        commandOptions: '-var "access_key=$(AzStorageAccountsAccessKey)"'
         backendServiceArm: ${{ parameters.AzureKeyVaultServiceConnectionName }}
         backendAzureRmResourceGroupName: ${{ parameters.AzureResourceGroupName }}
         backendAzureRmStorageAccountName: ${{ parameters.StorgeAccountsName }}
@@ -64,7 +58,7 @@ parameters:
         environmentServiceNameAzureRM: ${{ parameters.AzureKeyVaultServiceConnectionName }}
         command: 'plan'
         commandOptions: >-
-          -var-file="${{ parameters.VarFilePath }}" -lock=false -var "auth0_client_id=${{ parameters.TFAuth0ClientId }}" -var "auth0_client_secret=${{ parameters.TFAuth0ClientSecret }}"
+          -var-file="${{ parameters.VarFilePath }}" -lock=false -var "auth0_client_id=$(TFAuth0ClientId)" -var "auth0_client_secret=$(TFAuth0ClientSecret)"
 
     - task: TerraformTaskV3@3
       displayName: 'Terraform Apply'
@@ -74,4 +68,4 @@ parameters:
         command: 'apply'
         environmentServiceNameAzureRM: ${{ parameters.AzureKeyVaultServiceConnectionName }}
         commandOptions: >-
-          -var-file="${{ parameters.VarFilePath }}" -lock=false -var "auth0_client_id=${{ parameters.TFAuth0ClientId }}" -var "auth0_client_secret=${{ parameters.TFAuth0ClientSecret }}" -auto-approve
+          -var-file="${{ parameters.VarFilePath }}" -lock=false -var "auth0_client_id=$(TFAuth0ClientId)" -var "auth0_client_secret=$(TFAuth0ClientSecret)" -auto-approve
