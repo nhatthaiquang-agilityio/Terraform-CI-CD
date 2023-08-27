@@ -12,58 +12,62 @@ parameters:
 - name: VarFilePath
   default: '' 
 - name: AzureRmKeyTFState
-  default: '' 
+  default: ''
+- name: KeyVaultName
+  default: ''
 
-steps:
-- task: TerraformInstaller@0
-  displayName: "install"
-  inputs:
-    terraformVersion: '1.5.6'
+jobs:
+- job: Create_App_Auth0
+  steps:
+  - task: TerraformInstaller@0
+    displayName: "install"
+    inputs:
+      terraformVersion: '1.5.6'
 
-- task: AzureKeyVault@2
-  displayName: 'Download Azure KV'
-  inputs:
-    azureSubscription: ${{ parameters.AzureKeyVaultServiceConnectionName }}
-    KeyVaultName: 'AzKvTerraformVariables'
-    SecretsFilter: '*'
-    RunAsPreJob: true
+  - task: AzureKeyVault@2
+    displayName: 'Download Azure KV'
+    inputs:
+      azureSubscription: ${{ parameters.AzureKeyVaultServiceConnectionName }}
+      KeyVaultName: ${{ parameters.KeyVaultName }}
+      SecretsFilter: '*'
+      RunAsPreJob: true
 
-- task: TerraformTaskV3@3
-  displayName: 'Terraform Init'
-  inputs:
-    workingDirectory: ${{ parameters.TerraformWorkingDirectory }}
-    provider: azurerm
-    command: init
-    commandOptions: '-var "access_key=$(AzStorageAccountsAccessKey)"'
-    backendServiceArm: ${{ parameters.AzureKeyVaultServiceConnectionName }}
-    backendAzureRmResourceGroupName: ${{ parameters.AzureResourceGroupName }}
-    backendAzureRmStorageAccountName: ${{ parameters.StorgeAccountsName }}
-    backendAzureRmContainerName: ${{ parameters.AzureContainerName }}
-    backendAzureRmKey: ${{ parameters.AzureRmKeyTFState }}
+  - task: TerraformTaskV3@3
+    displayName: 'Terraform Init'
+    inputs:
+      workingDirectory: ${{ parameters.TerraformWorkingDirectory }}
+      provider: azurerm
+      command: init
+      commandOptions: '-var "access_key=$(AzStorageAccountsAccessKey)"'
+      backendServiceArm: ${{ parameters.AzureKeyVaultServiceConnectionName }}
+      backendAzureRmResourceGroupName: ${{ parameters.AzureResourceGroupName }}
+      backendAzureRmStorageAccountName: ${{ parameters.StorgeAccountsName }}
+      backendAzureRmContainerName: ${{ parameters.AzureContainerName }}
+      backendAzureRmKey: ${{ parameters.AzureRmKeyTFState }}
 
-- task: TerraformTaskV3@3
-  displayName: 'validate'
-  inputs:
-    workingDirectory: ${{ parameters.TerraformWorkingDirectory }}
-    provider: 'azurerm'
-    command: 'validate'
+  - task: TerraformTaskV3@3
+    displayName: 'validate'
+    inputs:
+      workingDirectory: ${{ parameters.TerraformWorkingDirectory }}
+      provider: 'azurerm'
+      command: 'validate'
 
-- task: TerraformTaskV3@3
-  displayName: 'Terraform Plan'
-  inputs:
-    workingDirectory: ${{ parameters.TerraformWorkingDirectory }}
-    provider: 'azurerm'
-    environmentServiceNameAzureRM: ${{ parameters.AzureKeyVaultServiceConnectionName }}
-    command: 'plan'
-    commandOptions: >-
-      -var-file="${{ parameters.VarFilePath }}" -lock=false -var "auth0_client_id=$(TFAuth0ClientId)" -var "auth0_client_secret=$(TFAuth0ClientSecret)"
+  - task: TerraformTaskV3@3
+    displayName: 'Terraform Plan'
+    inputs:
+      workingDirectory: ${{ parameters.TerraformWorkingDirectory }}
+      provider: 'azurerm'
+      environmentServiceNameAzureRM: ${{ parameters.AzureKeyVaultServiceConnectionName }}
+      command: 'plan'
+      commandOptions: >-
+        -var-file="${{ parameters.VarFilePath }}" -lock=false -var "auth0_client_id=$(TFAuth0ClientId)" -var "auth0_client_secret=$(TFAuth0ClientSecret)"
 
-- task: TerraformTaskV3@3
-  displayName: 'Terraform Apply'
-  inputs:
-    workingDirectory: ${{ parameters.TerraformWorkingDirectory }}
-    provider: 'azurerm'
-    command: 'apply'
-    environmentServiceNameAzureRM: ${{ parameters.AzureKeyVaultServiceConnectionName }}
-    commandOptions: >-
-      -var-file="${{ parameters.VarFilePath }}" -lock=false -var "auth0_client_id=$(TFAuth0ClientId)" -var "auth0_client_secret=$(TFAuth0ClientSecret)" -auto-approve
+  - task: TerraformTaskV3@3
+    displayName: 'Terraform Apply'
+    inputs:
+      workingDirectory: ${{ parameters.TerraformWorkingDirectory }}
+      provider: 'azurerm'
+      command: 'apply'
+      environmentServiceNameAzureRM: ${{ parameters.AzureKeyVaultServiceConnectionName }}
+      commandOptions: >-
+        -var-file="${{ parameters.VarFilePath }}" -lock=false -var "auth0_client_id=$(TFAuth0ClientId)" -var "auth0_client_secret=$(TFAuth0ClientSecret)" -auto-approve
