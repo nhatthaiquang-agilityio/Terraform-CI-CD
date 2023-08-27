@@ -17,9 +17,9 @@ parameters:
   default: ''
 - name: EnvironmentName
   default: 'Test'
-  
+
 jobs:
-- job: Create_App_Auth0_${{ parameters.EnvironmentName }}
+- job: CreateAppAuth0${{ parameters.EnvironmentName }}
   steps:
   - task: TerraformInstaller@0
     displayName: "install"
