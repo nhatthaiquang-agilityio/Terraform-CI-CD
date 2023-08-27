@@ -15,9 +15,11 @@ parameters:
   default: ''
 - name: KeyVaultName
   default: ''
-
+- name: EnvironmentName
+  default: 'Test'
+  
 jobs:
-- job: Create_App_Auth0
+- job: Create_App_Auth0_${{ parameters.EnvironmentName }}
   steps:
   - task: TerraformInstaller@0
     displayName: "install"
