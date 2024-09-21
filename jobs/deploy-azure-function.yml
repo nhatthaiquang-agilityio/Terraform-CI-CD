@@ -9,7 +9,6 @@ parameters:
   type: string
   default: ''
 
-
 jobs:
   - deployment: deploy_azure_function
     environment: ${{ parameters.EnvironmentName }}
