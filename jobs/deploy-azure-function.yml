@@ -1,0 +1,30 @@
+parameters:
+- name: EnvironmentName
+  type: string
+  default: ''
+- name: AzureSubscription
+  type: string
+  default: ''
+- name: AzureFunctionName
+  type: string
+  default: ''
+
+
+jobs:
+  - deployment: deploy_azure_function
+    environment: ${{ parameters.EnvironmentName }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - download: current
+            artifact: drop
+
+          - task: AzureFunctionApp@2
+            inputs:
+              connectedServiceNameARM: '${{ parameters.AzureSubscription }}'
+              appType: 'functionApp'
+              appName: '${{ parameters.AzureFunctionName }}'
+              package: $(System.ArtifactsDirectory)/**/*.zip
+              deploymentMethod: 'auto'
