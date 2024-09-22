@@ -8,9 +8,6 @@ parameters:
 - name: UnitTestPath
   type: string
   default: ''
-- name: SolutionPath
-  type: string
-  default: ''
 
 jobs:
   - job: 'build'
@@ -19,9 +16,11 @@ jobs:
       inputs:
         version: ${{ parameters.DotNetVersion }} # Specify the version you need
 
-    - script: |
-        dotnet restore
-        dotnet build ${{ parameters.SolutionPath }} --configuration Release
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore ${{ parameters.BuildTargetPath }}'
+      inputs:
+        command: restore
+        projects: ${{ parameters.BuildTargetPath }}
 
     - task: DotNetCoreCLI@2
       displayName: 'Build ${{ parameters.BuildTargetPath }}'
