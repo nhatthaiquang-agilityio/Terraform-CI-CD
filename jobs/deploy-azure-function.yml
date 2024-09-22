@@ -19,14 +19,10 @@ jobs:
       runOnce:
         deploy:
           steps:
-          - download: current
-            displayName: Download Web Application Artifact
-            artifact: ${{ parameters.ArtifactName }}
-
           - task: AzureFunctionApp@2
             inputs:
               connectedServiceNameARM: '${{ parameters.AzureSubscription }}'
               appType: 'functionApp'
               appName: '${{ parameters.AzureFunctionName }}'
-              package: $(System.ArtifactsDirectory)/**/*.zip
+              package: $(System.ArtifactsDirectory)/*.zip
               deploymentMethod: 'auto'
