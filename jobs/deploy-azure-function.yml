@@ -8,6 +8,9 @@ parameters:
 - name: AzureFunctionName
   type: string
   default: ''
+- name: ArtifactName
+  type: string
+  default: 'drop'
 
 jobs:
   - deployment: deploy_azure_function
@@ -16,9 +19,9 @@ jobs:
       runOnce:
         deploy:
           steps:
-          - checkout: self
           - download: current
-            artifact: drop
+            displayName: Download Web Application Artifact
+            artifact: ${{ parameters.ArtifactName }}
 
           - task: AzureFunctionApp@2
             inputs:

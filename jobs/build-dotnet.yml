@@ -41,14 +41,15 @@ jobs:
         publishTestResults: true
         arguments: --configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura,opencover
 
-    - task: ArchiveFiles@2
-      displayName: "Archive files"
+     - task: ArchiveFiles@2
+      displayName: Zip Build Artifacts
       inputs:
-        rootFolderOrFile: "$(System.DefaultWorkingDirectory)/publish_output"
+        rootFolderOrFile: $(build.artifactstagingdirectory)
         includeRootFolder: false
-        archiveFile: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
+        archiveFile: $(build.artifactstagingdirectory)/build$(Build.BuildId).zip
 
     - task: PublishBuildArtifacts@1
+      displayName: 'Publish ${{ parameters.BuildTargetPath }}'
       inputs:
-        PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
-        artifactName: 'drop'
+        PathtoPublish: '$(build.artifactstagingdirectory)/build$(Build.BuildId).zip'
+        ArtifactName: 'drop'
