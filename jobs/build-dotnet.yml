@@ -41,7 +41,7 @@ jobs:
         publishTestResults: true
         arguments: --configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura,opencover
 
-     - task: ArchiveFiles@2
+    - task: ArchiveFiles@2
       displayName: Zip Build Artifacts
       inputs:
         rootFolderOrFile: $(build.artifactstagingdirectory)
