@@ -26,7 +26,7 @@ jobs:
       displayName: 'Build ${{ parameters.BuildTargetPath }}'
       inputs:
         command: publish
-        arguments: '--configuration Release --output publish_output'
+        arguments: '--configuration Release --output $(build.artifactstagingdirectory)'
         projects: ${{ parameters.BuildTargetPath }}
         publishWebProjects: false
         modifyOutputPath: false
