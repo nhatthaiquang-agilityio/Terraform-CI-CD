@@ -2,15 +2,15 @@ parameters:
 - name: TerraformWorkingDirectory
   default: ''
 - name: AzureKeyVaultServiceConnectionName
-  default: '' 
+  default: ''
 - name: AzureResourceGroupName
   default: ''
-- name: StorgeAccountsName
-  default: '' 
+- name: StorageAccountsName
+  default: ''
 - name: AzureContainerName
   default: ''
 - name: VarFilePath
-  default: '' 
+  default: ''
 - name: AzureRmKeyTFState
   default: ''
 - name: KeyVaultName
@@ -43,7 +43,7 @@ jobs:
       commandOptions: '-var "access_key=$(AzStorageAccountsAccessKey)"'
       backendServiceArm: ${{ parameters.AzureKeyVaultServiceConnectionName }}
       backendAzureRmResourceGroupName: ${{ parameters.AzureResourceGroupName }}
-      backendAzureRmStorageAccountName: ${{ parameters.StorgeAccountsName }}
+      backendAzureRmStorageAccountName: ${{ parameters.StorageAccountsName }}
       backendAzureRmContainerName: ${{ parameters.AzureContainerName }}
       backendAzureRmKey: ${{ parameters.AzureRmKeyTFState }}
 

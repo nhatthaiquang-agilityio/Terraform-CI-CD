@@ -21,7 +21,7 @@ parameters:
   default: ''
 
 jobs:
-- job: SetupInfrastructure${{ parameters.EnvironmentName }}
+- job: ${{ parameters.EnvironmentName }}_Infra_With_${{ parameters.AzureServiceConnectionName }}
   steps:
   - task: TerraformInstaller@0
     displayName: "install"
