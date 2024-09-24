@@ -89,7 +89,7 @@ jobs:
       provider: 'azurerm'
       environmentServiceNameAzureRM: '${{ parameters.AzureServiceConnectionName }}'
       command: 'plan'
-      commandOptions: '-var "environment=${{ parameters.EnvironmentName }}" -var "resource_group_name=${{ parameters.AzureResourceGroupName }}" -var "location=${{ parameters.Location }}" -var "functionapp_storage_account_name=${{ parameters.FuncStorageAccountName }}" -var "azurerm_windows_function_app_name=${{ paramters.AzureFunctionName }}" -input=false'
+      commandOptions: '-var "environment=${{ parameters.EnvironmentName }}" -var "resource_group_name=${{ parameters.AzureResourceGroupName }}" -var "location=${{ parameters.Location }}" -var "functionapp_storage_account_name=${{ parameters.FuncStorageAccountName }}" -var "azurerm_windows_function_app_name=${{ parameters.AzureFunctionName }}" -input=false'
 
   - task: TerraformTaskV3@3
     displayName: 'Terraform Apply'
@@ -97,4 +97,4 @@ jobs:
       workingDirectory: '${{ parameters.TerraformWorkingDirectory }}'
       provider: 'azurerm'
       command: 'apply'
-      environmentServiceNameAzureRM: '-var "environment=${{ parameters.EnvironmentName }}" -var "resource_group_name=${{ parameters.AzureResourceGroupName }}" -var "location=${{ parameters.Location }}" -var "functionapp_storage_account_name=${{ parameters.FuncStorageAccountName }}" -var "azurerm_windows_function_app_name=${{ paramters.AzureFunctionName }}" -lock=false -auto-approve'
+      environmentServiceNameAzureRM: '-var "environment=${{ parameters.EnvironmentName }}" -var "resource_group_name=${{ parameters.AzureResourceGroupName }}" -var "location=${{ parameters.Location }}" -var "functionapp_storage_account_name=${{ parameters.FuncStorageAccountName }}" -var "azurerm_windows_function_app_name=${{ parameters.AzureFunctionName }}" -lock=false -auto-approve'
