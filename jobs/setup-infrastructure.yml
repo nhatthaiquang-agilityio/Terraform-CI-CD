@@ -28,27 +28,6 @@ jobs:
     inputs:
       terraformVersion: '1.5.6'
 
-  # Configure Azure Provider
-  # This is optional but just for debugging purposes and test the AzureCLI task
-  - task: AzureCLI@2
-    condition:
-    inputs:
-      azureSubscription: '${{ parameters.AzureServiceConnectionName }}'
-      scriptType: 'pscore'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        az account show
-
-  # Need to create a resource group for the solution to be deployed.
-  - task: AzureCLI@2
-    displayName: 'Create resource group ${{ parameters.AzureResourceGroupName }}'
-    inputs:
-      azureSubscription: '${{ parameters.AzureServiceConnectionName }}'
-      scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        az group create -n ${{ parameters.AzureResourceGroupName }} -l ${{ parameters.Location }}
-
   # A storage account is needed to store the terraform statefile.
   - task: AzureCLI@2
     displayName: 'Create storage account ${{ parameters.StorageAccountsName }} for terraform state files'
@@ -58,7 +37,6 @@ jobs:
       scriptLocation: 'inlineScript'
       inlineScript: |
         az storage account create -n ${{ parameters.StorageAccountsName }} -g ${{ parameters.AzureResourceGroupName }} -l  ${{ parameters.Location }} --sku Standard_LRS
-
 
   - task: TerraformTaskV3@3
     displayName: 'Terraform Init'
