@@ -31,7 +31,7 @@ jobs:
   # Configure Azure Provider
   # This is optional but just for debugging purposes and test the AzureCLI task
   - task: AzureCLI@2
-    condition: false
+    condition:
     inputs:
       azureSubscription: '${{ parameters.AzureServiceConnectionName }}'
       scriptType: 'pscore'
@@ -42,7 +42,6 @@ jobs:
   # Need to create a resource group for the solution to be deployed.
   - task: AzureCLI@2
     displayName: 'Create resource group ${{ parameters.AzureResourceGroupName }}'
-    condition: false
     inputs:
       azureSubscription: '${{ parameters.AzureServiceConnectionName }}'
       scriptType: 'bash'
@@ -53,7 +52,6 @@ jobs:
   # A storage account is needed to store the terraform statefile.
   - task: AzureCLI@2
     displayName: 'Create storage account ${{ parameters.StorageAccountsName }} for terraform state files'
-    condition: false
     inputs:
       azureSubscription: '${{ parameters.AzureServiceConnectionName }}'
       scriptType: 'bash'
