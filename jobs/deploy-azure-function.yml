@@ -11,13 +11,13 @@ parameters:
 - name: ArtifactName
   type: string
   default: 'drop'
-- name: AzureResourceGroup
-  type: string
-  default: ''
-- name: UpdatedAppSettings
-  type: string
-  default: 'No'
-- name: ServiceBus
+# - name: AzureResourceGroup
+#   type: string
+#   default: ''
+# - name: UpdatedAppSettings
+#   type: string
+#   default: 'No'
+- name: AppSettings
   type: string
   default: ''
 
@@ -29,21 +29,15 @@ jobs:
         deploy:
           steps:
 
-          - task: AzureAppServiceSettings@1
-            displayName: Update app settings
-            condition: eq(${{ parameters.UpdatedAppSettings }}, 'Yes')
-            inputs:
-              azureSubscription: '${{ parameters.AzureSubscription }}'
-              appName: '${{ parameters.AzureFunctionName }}'
-              resourceGroupName: '${{ parameters.AzureResourceGroup }}'
-              appSettings: |
-                [
-                  {
-                    "name": "Values:ServiceBus",
-                    "value": "${{ parameters.ServiceBus }}",
-                    "slotSetting": false
-                  }
-                ]
+          # - task: AzureAppServiceSettings@1
+          #   displayName: Update app settings
+          #   condition: eq(${{ parameters.UpdatedAppSettings }}, 'Yes')
+          #   inputs:
+          #     azureSubscription: '${{ parameters.AzureSubscription }}'
+          #     appName: '${{ parameters.AzureFunctionName }}'
+          #     resourceGroupName: '${{ parameters.AzureResourceGroup }}'
+          #     appSettings: '${{ parameters.AppSettings }}'
+
 
           - task: AzureFunctionApp@2
             inputs:
@@ -52,4 +46,4 @@ jobs:
               appName: '${{ parameters.AzureFunctionName }}'
               package: '$(Agent.BuildDirectory)\${{ parameters.ArtifactName }}\*.zip'
               deploymentMethod: 'auto'
-              appSettings: '-FUNCTIONS_EXTENSION_VERSION ~3'
+              appSettings: '${{ parameters.AppSettings }}'
