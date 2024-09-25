@@ -3,25 +3,31 @@ parameters:
   default: ''
 - name: AzureServiceConnectionName
   default: ''
+  description: 'Azure Service Connection Name'
 - name: AzureResourceGroupName
   default: ''
+  description: 'Resource Group Name for Terraform State And Azure Function'
 - name: StorageAccountsName
   default: ''
+  description: 'Storage Account Name for Terraform State'
 - name: AzureContainerName
   default: ''
+  description: 'Container Name for Terraform State'
 - name: AzureRmKeyTFState
   default: ''
+  description: 'FileName for Terraform State'
 - name: EnvironmentName
   default: 'Test'
 - name: Location
-  default: 'SouthEastAsia'
+  default: 'SouthEast Asia'
 - name: FuncStorageAccountName
   default: ''
+  description: 'Storage Account Name for Azure Function'
 - name: AzureFunctionName
   default: ''
 
 jobs:
-- job: ${{ parameters.EnvironmentName }}_Infra_With_${{ parameters.AzureServiceConnectionName }}
+- job: ${{ parameters.EnvironmentName }}_Infra_Terraform
   steps:
   - task: TerraformInstaller@0
     displayName: "install"
