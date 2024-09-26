@@ -1,0 +1,63 @@
+parameters:
+- name: TerraformWorkingDirectory
+  default: ''
+- name: AzureServiceConnectionName
+  default: ''
+- name: AzureResourceGroupName
+  default: ''
+- name: StorageAccountsName
+  default: ''
+- name: AzureContainerName
+  default: ''
+- name: AzureRmKeyTFState
+  default: ''
+- name: EnvironmentName
+  default: 'Test'
+- name: Location
+  default: 'SouthEast Asia'
+
+jobs:
+- job: ${{ parameters.EnvironmentName }}_API_Management_Infra_W_Terraform
+  steps:
+  - task: TerraformInstaller@0
+    displayName: "install"
+    inputs:
+      terraformVersion: '1.5.6'
+
+  - task: TerraformTaskV3@3
+    displayName: 'Terraform Init'
+    inputs:
+      workingDirectory: '${{ parameters.TerraformWorkingDirectory }}'
+      provider: azurerm
+      command: init
+      commandOptions: '-lock=false'
+      backendServiceArm: '${{ parameters.AzureServiceConnectionName }}'
+      backendAzureRmResourceGroupName: '${{ parameters.AzureResourceGroupName }}'
+      backendAzureRmStorageAccountName: '${{ parameters.StorageAccountsName }}'
+      backendAzureRmContainerName: '${{ parameters.AzureContainerName }}'
+      backendAzureRmKey: '${{ parameters.AzureRmKeyTFState }}'
+
+  - task: TerraformTaskV3@3
+    displayName: 'validate'
+    inputs:
+      workingDirectory: '${{ parameters.TerraformWorkingDirectory }}'
+      provider: 'azurerm'
+      command: 'validate'
+
+  - task: TerraformTaskV3@3
+    displayName: 'Terraform Plan'
+    inputs:
+      workingDirectory: '${{ parameters.TerraformWorkingDirectory }}'
+      provider: 'azurerm'
+      environmentServiceNameAzureRM: '${{ parameters.AzureServiceConnectionName }}'
+      command: 'plan'
+      commandOptions: '-var "environment=${{ parameters.EnvironmentName }}" -var "resource_group_name=${{ parameters.AzureResourceGroupName }}" -var "location=${{ parameters.Location }}" -input=false'
+
+  - task: TerraformTaskV3@3
+    displayName: 'Terraform Apply'
+    inputs:
+      workingDirectory: '${{ parameters.TerraformWorkingDirectory }}'
+      provider: 'azurerm'
+      command: 'apply'
+      environmentServiceNameAzureRM: '${{ parameters.AzureServiceConnectionName }}'
+      commandOptions: '-var "environment=${{ parameters.EnvironmentName }}" -var "resource_group_name=${{ parameters.AzureResourceGroupName }}" -var "location=${{ parameters.Location }}" -lock=false -auto-approve'

@@ -11,12 +11,6 @@ parameters:
 - name: ArtifactName
   type: string
   default: 'drop'
-# - name: AzureResourceGroup
-#   type: string
-#   default: ''
-# - name: UpdatedAppSettings
-#   type: string
-#   default: 'No'
 - name: AppSettings
   type: string
   default: ''
@@ -28,17 +22,6 @@ jobs:
       runOnce:
         deploy:
           steps:
-
-          # - task: AzureAppServiceSettings@1
-          #   displayName: Update app settings
-          #   condition: eq(${{ parameters.UpdatedAppSettings }}, 'Yes')
-          #   inputs:
-          #     azureSubscription: '${{ parameters.AzureSubscription }}'
-          #     appName: '${{ parameters.AzureFunctionName }}'
-          #     resourceGroupName: '${{ parameters.AzureResourceGroup }}'
-          #     appSettings: '${{ parameters.AppSettings }}'
-
-
           - task: AzureFunctionApp@2
             inputs:
               connectedServiceNameARM: '${{ parameters.AzureSubscription }}'
