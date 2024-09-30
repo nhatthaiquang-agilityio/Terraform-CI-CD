@@ -13,7 +13,10 @@ parameters:
   default: ''
 - name: EnvironmentName
   default: 'Test'
-
+- name: AzureSubscriptionId
+  default: ''
+- name: AzureClientSecret
+  default: ''
 
 jobs:
 - job: ${{ parameters.EnvironmentName }}_API_Management_Infra_W_Terraform
@@ -59,4 +62,4 @@ jobs:
       provider: 'azurerm'
       command: 'apply'
       environmentServiceNameAzureRM: '${{ parameters.AzureServiceConnectionName }}'
-      commandOptions: '-var-file="Environments/${{ parameters.EnvironmentName }}.tfvars" -lock=false -auto-approve'
+      commandOptions: '-var-file="Environments/${{ parameters.EnvironmentName }}.tfvars" -var "client_secret=${{ parameters.AzureClientSecret }}" -var "subscription_id=${{ parameters.AzureSubscriptionId }}" -lock=false -auto-approve'
