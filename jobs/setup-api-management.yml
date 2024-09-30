@@ -32,7 +32,7 @@ jobs:
       workingDirectory: '${{ parameters.TerraformWorkingDirectory }}'
       provider: azurerm
       command: init
-      commandOptions: '-lock=false'
+      commandOptions: '-var "client_secret=${{ parameters.AzureClientSecret }}" -var "subscription_id=${{ parameters.AzureSubscriptionId }}" -lock=false'
       backendServiceArm: '${{ parameters.AzureServiceConnectionName }}'
       backendAzureRmResourceGroupName: '${{ parameters.AzureResourceGroupName }}'
       backendAzureRmStorageAccountName: '${{ parameters.StorageAccountsName }}'
@@ -53,7 +53,10 @@ jobs:
       provider: 'azurerm'
       environmentServiceNameAzureRM: '${{ parameters.AzureServiceConnectionName }}'
       command: 'plan'
-      commandOptions: '-var-file="Environments/${{ parameters.EnvironmentName }}.tfvars" -input=false'
+      commandOptions: >-
+        -var-file="Environments/${{ parameters.EnvironmentName }}.tfvars"
+        -var "client_secret=${{ parameters.AzureClientSecret }}" -var "subscription_id=${{ parameters.AzureSubscriptionId }}"
+        -input=false
 
   - task: TerraformTaskV3@3
     displayName: 'Terraform Apply'
@@ -62,4 +65,7 @@ jobs:
       provider: 'azurerm'
       command: 'apply'
       environmentServiceNameAzureRM: '${{ parameters.AzureServiceConnectionName }}'
-      commandOptions: '-var-file="Environments/${{ parameters.EnvironmentName }}.tfvars" -var "client_secret=${{ parameters.AzureClientSecret }}" -var "subscription_id=${{ parameters.AzureSubscriptionId }}" -lock=false -auto-approve'
+      commandOptions: >-
+        -var-file="Environments/${{ parameters.EnvironmentName }}.tfvars"
+        -var "client_secret=${{ parameters.AzureClientSecret }}" -var "subscription_id=${{ parameters.AzureSubscriptionId }}"
+        -lock=false -auto-approve
