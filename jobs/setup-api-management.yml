@@ -55,6 +55,7 @@ jobs:
       command: 'plan'
       commandOptions: >-
         -var-file="Environments/${{ parameters.EnvironmentName }}.tfvars"
+        -var "client_secret=${{ parameters.AzureClientSecret }}" -var "subscription_id=${{ parameters.AzureSubscriptionId }}"
         -input=false
 
   - task: TerraformTaskV3@3
