@@ -24,7 +24,7 @@ jobs:
   - task: TerraformInstaller@0
     displayName: "install"
     inputs:
-      terraformVersion: '1.5.6'
+      terraformVersion: latest
 
   - task: TerraformTaskV3@3
     displayName: 'Terraform Init'
@@ -32,7 +32,7 @@ jobs:
       workingDirectory: '${{ parameters.TerraformWorkingDirectory }}'
       provider: azurerm
       command: init
-      commandOptions: '-var "client_secret=${{ parameters.AzureClientSecret }}" -var "subscription_id=${{ parameters.AzureSubscriptionId }}" -lock=false'
+      commandOptions: '-lock=false'
       backendServiceArm: '${{ parameters.AzureServiceConnectionName }}'
       backendAzureRmResourceGroupName: '${{ parameters.AzureResourceGroupName }}'
       backendAzureRmStorageAccountName: '${{ parameters.StorageAccountsName }}'
