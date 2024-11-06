@@ -15,7 +15,7 @@ parameters:
   default: 'Test'
 
 jobs:
-- job: ${{ parameters.EnvironmentName }}_API_Management_Infra_W_Terraform
+- job: ${{ parameters.EnvironmentName }}_Infra_W_Terraform
   steps:
   - task: TerraformInstaller@0
     displayName: "install"
