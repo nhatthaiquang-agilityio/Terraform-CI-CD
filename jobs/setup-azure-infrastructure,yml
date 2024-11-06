@@ -13,20 +13,14 @@ parameters:
   default: ''
 - name: EnvironmentName
   default: 'Test'
-- name: Location
-  default: 'SouthEast Asia'
-- name: FuncStorageAccountName
-  default: ''
-- name: AzureFunctionName
-  default: ''
 
 jobs:
-- job: ${{ parameters.EnvironmentName }}_Infra_Terraform
+- job: ${{ parameters.EnvironmentName }}_API_Management_Infra_W_Terraform
   steps:
   - task: TerraformInstaller@0
     displayName: "install"
     inputs:
-      terraformVersion: '1.5.6'
+      terraformVersion: latest
 
   - task: TerraformTaskV3@3
     displayName: 'Terraform Init'
@@ -56,9 +50,8 @@ jobs:
       environmentServiceNameAzureRM: '${{ parameters.AzureServiceConnectionName }}'
       command: 'plan'
       commandOptions: >-
-        -var "environment=${{ parameters.EnvironmentName }}" -var "resource_group_name=${{ parameters.AzureResourceGroupName }}"
-        -var "location=${{ parameters.Location }}" -var "functionapp_storage_account_name=${{ parameters.FuncStorageAccountName }}"
-        -var "azurerm_windows_function_app_name=${{ parameters.AzureFunctionName }}" -input=false
+        -var-file="Environments/${{ parameters.EnvironmentName }}.tfvars"
+        -input=false
 
   - task: TerraformTaskV3@3
     displayName: 'Terraform Apply'
@@ -68,6 +61,5 @@ jobs:
       command: 'apply'
       environmentServiceNameAzureRM: '${{ parameters.AzureServiceConnectionName }}'
       commandOptions: >-
-        -var "environment=${{ parameters.EnvironmentName }}" -var "resource_group_name=${{ parameters.AzureResourceGroupName }}"
-        -var "location=${{ parameters.Location }}" -var "functionapp_storage_account_name=${{ parameters.FuncStorageAccountName }}"
-        -var "azurerm_windows_function_app_name=${{ parameters.AzureFunctionName }}" -lock=false -auto-approve
+        -var-file="Environments/${{ parameters.EnvironmentName }}.tfvars"
+        -lock=false -auto-approve
