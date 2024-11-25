@@ -46,10 +46,10 @@ jobs:
       inputs:
         rootFolderOrFile: $(build.artifactstagingdirectory)
         includeRootFolder: false
-        archiveFile: $(build.artifactstagingdirectory)/build$(Build.BuildId).zip
+        archiveFile: $(build.artifactstagingdirectory)/$(Build.BuildNumber).zip
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish ${{ parameters.BuildTargetPath }}'
       inputs:
-        PathtoPublish: '$(build.artifactstagingdirectory)/build$(Build.BuildId).zip'
+        PathtoPublish: '$(build.artifactstagingdirectory)/$(Build.BuildNumber).zip'
         ArtifactName: 'drop'
