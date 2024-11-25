@@ -8,15 +8,12 @@ parameters:
 - name: AzureFunctionName
   type: string
   default: ''
-- name: ArtifactName
-  type: string
-  default: 'drop'
 - name: AppSettings
   type: string
   default: ''
 - name: PackagePath
   type: string
-  default: '$(Agent.BuildDirectory)\${{ parameters.ArtifactName }}\*.zip'
+  default: '$(Agent.BuildDirectory)\drop\*.zip'
 
 jobs:
   - deployment: deploy_azure_function
