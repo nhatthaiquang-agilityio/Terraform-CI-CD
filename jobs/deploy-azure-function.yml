@@ -14,6 +14,9 @@ parameters:
 - name: AppSettings
   type: string
   default: ''
+- name: PackagePath
+  type: string
+  default: '$(Agent.BuildDirectory)\${{ parameters.ArtifactName }}\*.zip'
 
 jobs:
   - deployment: deploy_azure_function
@@ -27,6 +30,6 @@ jobs:
               connectedServiceNameARM: '${{ parameters.AzureSubscription }}'
               appType: 'functionApp'
               appName: '${{ parameters.AzureFunctionName }}'
-              package: '$(Agent.BuildDirectory)\${{ parameters.ArtifactName }}\*.zip'
+              package: '${{ parameters.PackagePath }}'
               deploymentMethod: 'auto'
               appSettings: '${{ parameters.AppSettings }}'
