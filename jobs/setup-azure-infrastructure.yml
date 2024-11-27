@@ -17,7 +17,7 @@ parameters:
 jobs:
 - job: ${{ parameters.EnvironmentName }}_Infra_W_Terraform
   steps:
-  - task: TerraformInstaller@0
+  - task: TerraformInstaller@1
     displayName: "install"
     inputs:
       terraformVersion: latest
