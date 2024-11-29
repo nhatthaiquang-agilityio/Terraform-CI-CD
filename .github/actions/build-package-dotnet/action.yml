@@ -1,0 +1,63 @@
+name: Build and Package .NET
+description: 'Build and Package a .NET project'
+
+inputs:
+  solution-path:
+    required: true
+    type: string
+  build-target-path:
+    required: true
+    type: string
+  build-test-path:
+    default: ''
+    type: string
+  build-configuration:
+    default: 'Release'
+    type: string
+  dotnet-version:
+    default: '8.0.x'
+    type: string
+  artifact-name:
+    default: 'drop'
+    type: string
+
+outputs:
+  build-number:
+    description: "Build number"
+    value: ${{ steps.build_number.outputs.buildNumber }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+
+    - name: Restore dependencies
+      shell: powershell
+      run: dotnet restore
+
+    - name: Get Build Number
+      id: build_number
+      shell: powershell
+      run: echo "buildNumber=$(date +'%Y.%m.%d').${{ github.run_number }}" >> $env:GITHUB_OUTPUT
+
+    - name: Set Build Number to environment
+      shell: powershell
+      run: echo "BUILD_NUMBER=${{ steps.build_number.outputs.buildNumber }}" >> $env:GITHUB_ENV
+
+    - name: Build ${{ inputs.build-target-path }}
+      shell: powershell
+      run: dotnet publish ${{ inputs.build-target-path }} -c ${{ inputs.build-configuration }} --sc true -o ${{ github.workspace }}\${{ inputs.build-target-path }}.${{ env.BUILD_NUMBER }}
+
+    - name: Test
+      shell: powershell
+      if: ${{ inputs.build-test-path != '' }}
+      run: dotnet test ${{ inputs.build-test-path }} --no-restore --verbosity normal
+
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ github.workspace }}\${{ inputs.build-target-path }}.${{ env.BUILD_NUMBER }}
