@@ -11,9 +11,9 @@ inputs:
   terraform-filename:
     description: 'The filename tfstate'
     required: true
-  arm-client-secret:
-    description: 'ARM_CLIENT_SECRET'
-    required: true
+  # arm-client-secret:
+  #   description: 'ARM_CLIENT_SECRET'
+  #   required: true
   arm-client-id:
     description: 'The Azure Client ID'
     required: true
@@ -37,6 +37,15 @@ runs:
   using: "composite"
 
   steps:
+    # Acquire azure credential
+    - name: Azure Login
+      uses: azure/login@v2
+      with:
+        client-id: ${{ inputs.arm-client-id }}
+        tenant-id: ${{ inputs.arm-tenant-id}}
+        subscription-id: ${{ inputs.arm-subscription-id }}
+        enable-AzPSSession: true
+
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
       with:
