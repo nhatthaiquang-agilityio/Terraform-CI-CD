@@ -1,0 +1,66 @@
+name: Terraform
+description: 'Terraform'
+
+inputs:
+  working-directory:
+    description: 'The Working Directory'
+    required: true
+  environment:
+    description: 'The Environment'
+    required: true
+  arm-client-secret:
+    description: 'Azure ARM Credentials'
+    required: true
+  terraform-filename:
+    description: 'The filename tfstate'
+    required: true
+  terraform-resource-group-name:
+    description: 'The Azure Resource Group Name'
+    required: true
+  terraform-storage-account:
+    description: 'The Azure Storage Account'
+    required: true
+  terraform-container-name:
+    description: 'The Azure Container Name'
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_wrapper: false
+
+    - name: Prepare environment variables
+      shell: bash
+      run: |
+        echo "ARM_CLIENT_SECRET=${{ inputs.arm-client-secret }}"              >> "$GITHUB_ENV"
+
+    - name: Terraform Init
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        terraform init \
+          -backend-config="storage_account_name=${{ inputs.terraform-storage-account }}" \
+          -backend-config="container_name=${{ inputs.terraform-container-name }}" \
+          -backend-config="resource_group_name=${{ inputs.terraform-resource-group-name }}" \
+          -backend-config="key=${{ inputs.terraform-filename }}"
+
+    - name: Terraform Validate
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: terraform validate
+
+    - name: Terraform Plan
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        terraform plan -var-file="Environments/${{ inputs.environment }}.tfvars" -input=false
+
+    - name: Terraform Apply
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        terraform apply -var-file="Environments/${{ inputs.environment }}.tfvars" -auto-approve -input=false
