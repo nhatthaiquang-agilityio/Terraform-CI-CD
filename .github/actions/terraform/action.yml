@@ -8,8 +8,17 @@ inputs:
   environment:
     description: 'The Environment'
     required: true
+  arm-client-id:
+    description: 'Azure ARM Client ID'
+    required: true
   arm-client-secret:
-    description: 'Azure ARM Credentials'
+    description: 'Azure ARM Client Secret'
+    required: true
+  arm-subscription-id:
+    description: 'Azure ARM Subscription ID'
+    required: true
+  arm-tenant-id:
+    description: 'Azure ARM Tenant ID'
     required: true
   terraform-filename:
     description: 'The filename tfstate'
@@ -36,7 +45,10 @@ runs:
     - name: Prepare environment variables
       shell: bash
       run: |
+        echo "ARM_CLIENT_ID=${{ inputs.arm-client-id }}"                      >> "$GITHUB_ENV"
         echo "ARM_CLIENT_SECRET=${{ inputs.arm-client-secret }}"              >> "$GITHUB_ENV"
+        echo "ARM_SUBSCRIPTION_ID=${{ inputs.arm-subscription-id }}"          >> "$GITHUB_ENV"
+        echo "ARM_TENANT_ID=${{ inputs.arm-tenant-id }}"                      >> "$GITHUB_ENV"
 
     - name: Terraform Init
       shell: bash
