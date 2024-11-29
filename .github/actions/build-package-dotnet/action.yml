@@ -8,6 +8,9 @@ inputs:
   build-target-path:
     required: true
     type: string
+  build-name:
+    required: true
+    type: string
   build-test-path:
     default: ''
     type: string
@@ -45,7 +48,7 @@ runs:
 
     - name: Build ${{ inputs.build-target-path }}
       shell: powershell
-      run: dotnet publish ${{ inputs.build-target-path }} -c ${{ inputs.build-configuration }} --sc true -o ${{ github.workspace }}\${{ inputs.build-target-path }}.${{ env.BUILD_NUMBER }}
+      run: dotnet build ${{ inputs.build-target-path }} -c ${{ inputs.build-configuration }} --sc true -o ${{ github.workspace }}\${{ inputs.build-name }}.${{ env.BUILD_NUMBER }}
 
     - name: Test
       shell: powershell
@@ -56,4 +59,4 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.artifact-name }}
-        path: ${{ github.workspace }}\${{ inputs.build-target-path }}.${{ env.BUILD_NUMBER }}
+        path: ${{ github.workspace }}\${{ inputs.build-name }}.${{ env.BUILD_NUMBER }}
