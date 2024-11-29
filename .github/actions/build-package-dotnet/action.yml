@@ -36,7 +36,7 @@ runs:
 
     - name: Restore dependencies
       shell: powershell
-      run: dotnet restore
+      run: dotnet restore ${{ inputs.solution-path }}
 
     - name: Get Build Number
       id: build_number
