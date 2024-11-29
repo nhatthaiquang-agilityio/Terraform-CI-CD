@@ -8,20 +8,11 @@ inputs:
   environment:
     description: 'The Environment'
     required: true
+  arm-credentials:
+    description: 'Azure ARM Credentials'
+    required: true
   terraform-filename:
     description: 'The filename tfstate'
-    required: true
-  arm-client-secret:
-    description: 'ARM_CLIENT_SECRET'
-    required: true
-  arm-client-id:
-    description: 'The Azure Client ID'
-    required: true
-  arm-subscription-id:
-    description: 'The Azure Subscription ID'
-    required: true
-  arm-tenant-id:
-    description: 'The Azure Tenant ID'
     required: true
   terraform-resource-group-name:
     description: 'The Azure Resource Group Name'
@@ -41,7 +32,7 @@ runs:
     - uses: azure/login@v2
       name: Azure Login
       with:
-        creds: '{"clientId":"${{ inputs.arm-client-id }}","clientSecret":"${{ inputs.arm-client-secret }}","subscriptionId":"${{ inputs.arm-subscription-id }}","tenantId":"${{ inputs.arm-tenant-id }}"}'
+        creds: ${{ inputs.arm-credentials }}
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
