@@ -34,10 +34,6 @@ runs:
       with:
         dotnet-version: ${{ inputs.dotnet-version }}
 
-    - name: Restore dependencies
-      shell: powershell
-      run: dotnet restore ${{ inputs.solution-path }}
-
     - name: Get Build Number
       id: build_number
       shell: powershell
