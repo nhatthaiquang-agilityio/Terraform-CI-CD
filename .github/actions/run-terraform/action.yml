@@ -42,13 +42,6 @@ runs:
       with:
         terraform_wrapper: false
 
-    - name: Set environment variables for ${{ inputs.environment }}
-      uses: aarcangeli/load-dotenv@v1.0.0
-      with:
-        path: '${{ inputs.working-directory }}/../../.github/variables/${{ inputs.environment }}'
-        filenames: terraform-config.env
-        if-file-not-found: error
-
     - name: Terraform Init
       shell: bash
       working-directory: ${{ inputs.working-directory }}
