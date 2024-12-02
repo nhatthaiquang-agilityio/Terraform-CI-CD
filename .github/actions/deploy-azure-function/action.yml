@@ -1,0 +1,40 @@
+name: Deploy Azure Function
+description: 'Deploy a .NET project to Azure Function'
+
+inputs:
+  azure-function-app-name:
+    required: true
+    type: string
+  azure-function-package-path:
+    required: true
+    type: string
+  artifact-name:
+    default: 'drop'
+    type: string
+  publish-profile:
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Remove Build Artifact ${{ inputs.azure-function-package-path }} if exist
+      shell: powershell
+      run: |
+        if ( Test-Path ${{ inputs.azure-function-package-path }} ) {
+          Remove-Item ${{ inputs.azure-function-package-path }} -Recurse -Force
+        }
+
+    - name: Download Build Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.azure-function-package-path }}
+
+    - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1
+      id: azure-functions
+      with:
+        app-name: ${{ inputs.azure-function-app-name }}
+        package: ${{ inputs.azure-function-package-path }}
+        publish-profile: ${{ inputs.publish-profile }}
