@@ -30,4 +30,3 @@ runs:
       with:
         app-name: ${{ inputs.azure-function-app-name }}
         package: ${{ inputs.azure-function-package-path }}
-        publish-profile: ${{ inputs.publish-profile }}
