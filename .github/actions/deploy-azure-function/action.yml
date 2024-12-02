@@ -38,8 +38,8 @@ runs:
       with:
         client-id: ${{ inputs.arm-client-id }}
         client-secret: ${{ inputs.arm-client-secret }}
-        tenant-id: ${{ secrets.arm-tenant-id }}
-        subscription-id: ${{ secrets.arm-subscription-id }}
+        tenant-id: ${{ inputs.arm-tenant-id }}
+        subscription-id: ${{ inputs.arm-subscription-id }}
 
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
