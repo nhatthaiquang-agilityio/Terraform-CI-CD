@@ -27,7 +27,7 @@ runs:
     - name: Azure Login
       uses: azure/login@v1
       with:
-        creds: ${{ input.arm-credentials }}
+        creds: ${{ inputs.arm-credentials }}
 
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
