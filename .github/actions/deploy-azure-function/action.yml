@@ -37,7 +37,6 @@ runs:
       uses: azure/login@v2
       with:
         client-id: ${{ inputs.arm-client-id }}
-        client-secret: ${{ inputs.arm-client-secret }}
         tenant-id: ${{ inputs.arm-tenant-id }}
         subscription-id: ${{ inputs.arm-subscription-id }}
 
