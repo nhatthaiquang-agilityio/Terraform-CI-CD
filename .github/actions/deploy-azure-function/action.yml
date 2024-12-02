@@ -24,6 +24,14 @@ runs:
         name: ${{ inputs.artifact-name }}
         path: ${{ inputs.azure-function-package-path }}
 
+    - name: Azure CLI script
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.0.72
+        inlineScript: |
+          az account show
+          az storage -h
+
     - name: Get Az Version
       id: az_version
       shell: powershell
