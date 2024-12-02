@@ -11,18 +11,18 @@ inputs:
   artifact-name:
     default: 'drop'
     type: string
-  arm-client-id:
-    required: true
-    type: string
-  arm-client-secret:
-    required: true
-    type: string
-  arm-tenant-id:
-    required: true
-    type: string
-  arm-subscription-id:
-    required: true
-    type: string
+  # arm-client-id:
+  #   required: true
+  #   type: string
+  # arm-client-secret:
+  #   required: true
+  #   type: string
+  # arm-tenant-id:
+  #   required: true
+  #   type: string
+  # arm-subscription-id:
+  #   required: true
+  #   type: string
 
 runs:
   using: "composite"
@@ -33,12 +33,12 @@ runs:
         name: ${{ inputs.artifact-name }}
         path: ${{ inputs.azure-function-package-path }}
 
-    - name: 'Login via Azure CLI'
-      uses: azure/login@v2
-      with:
-        client-id: ${{ inputs.arm-client-id }}
-        tenant-id: ${{ inputs.arm-tenant-id }}
-        subscription-id: ${{ inputs.arm-subscription-id }}
+    # - name: 'Login via Azure CLI'
+    #   uses: azure/login@v2
+    #   with:
+    #     client-id: ${{ inputs.arm-client-id }}
+    #     tenant-id: ${{ inputs.arm-tenant-id }}
+    #     subscription-id: ${{ inputs.arm-subscription-id }}
 
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
