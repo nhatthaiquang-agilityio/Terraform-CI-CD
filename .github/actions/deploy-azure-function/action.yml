@@ -11,7 +11,16 @@ inputs:
   artifact-name:
     default: 'drop'
     type: string
-  publish-profile:
+  arm-client-id:
+    required: true
+    type: string
+  arm-client-secret:
+    required: true
+    type: string
+  arm-tenant-id:
+    required: true
+    type: string
+  arm-subscription-id:
     required: true
     type: string
 
@@ -27,10 +36,10 @@ runs:
     - name: 'Login via Azure CLI'
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        client-id: ${{ inputs.arm-client-id }}
+        client-secret: ${{ inputs.arm-client-secret }}
+        tenant-id: ${{ secrets.arm-tenant-id }}
+        subscription-id: ${{ secrets.arm-subscription-id }}
 
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
