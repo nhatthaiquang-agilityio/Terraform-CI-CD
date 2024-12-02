@@ -24,8 +24,13 @@ runs:
         name: ${{ inputs.artifact-name }}
         path: ${{ inputs.azure-function-package-path }}
 
+    - name: Get Az Version
+      id: az_version
+      shell: powershell
+      run: az --version
+
     - name: Azure Login
-      uses: azure/login@v1
+      uses: azure/login@v2
       with:
         creds: ${{ inputs.arm-credentials }}
 
