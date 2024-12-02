@@ -24,6 +24,14 @@ runs:
         name: ${{ inputs.artifact-name }}
         path: ${{ inputs.azure-function-package-path }}
 
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
       id: azure-functions
