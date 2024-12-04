@@ -48,7 +48,7 @@ runs:
 
     - name: Build ${{ inputs.build-target-path }}
       shell: powershell
-      run: dotnet build ${{ inputs.build-target-path }} -c ${{ inputs.build-configuration }} --sc true -o ${{ github.workspace }}\${{ inputs.build-name }}.${{ env.BUILD_NUMBER }}
+      run: dotnet build -c ${{ inputs.build-configuration }} --sc true -o ${{ github.workspace }}\${{ inputs.build-name }}.${{ env.BUILD_NUMBER }}
 
     - name: Test
       shell: powershell
