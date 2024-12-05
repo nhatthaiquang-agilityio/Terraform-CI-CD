@@ -2,9 +2,6 @@ name: Build and Package .NET
 description: 'Build and Package a .NET project'
 
 inputs:
-  solution-path:
-    required: true
-    type: string
   build-target-path:
     required: true
     type: string
