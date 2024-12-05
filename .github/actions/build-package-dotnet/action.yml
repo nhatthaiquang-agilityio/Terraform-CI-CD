@@ -49,7 +49,7 @@ runs:
 
     - name: Build ${{ inputs.build-target-path }}
       shell: powershell
-      run: dotnet publish ${{ inputs.build-target-path }} -c ${{ inputs.build-configuration }} --sc true -o ${{ github.workspace }}\${{ inputs.build-name }}.${{ env.BUILD_NUMBER }}
+      run: dotnet publish ${{ inputs.build-target-path }} -c ${{ inputs.build-configuration }} -o ${{ github.workspace }}\${{ inputs.build-name }}.${{ env.BUILD_NUMBER }}
 
     - name: Test
       shell: powershell
