@@ -59,5 +59,6 @@ runs:
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
       with:
+        include-hidden-files: true
         name: ${{ inputs.artifact-name }}
         path: ./${{ inputs.build-name }}.${{ env.BUILD_NUMBER }}/*
