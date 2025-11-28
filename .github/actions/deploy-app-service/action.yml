@@ -1,0 +1,41 @@
+name: Deploy App Service
+description: 'Deploy a .NET project to Azure App Service'
+
+inputs:
+  azure-app-service-publish-profile:
+    required: true
+    type: string
+  azure-app-service-name:
+    required: true
+    type: string
+  azure-app-service-package-path:
+    required: true
+    type: string
+  artifact-name:
+    default: 'drop'
+    type: string
+  arm-credentials:
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Download Build Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ inputs.azure-app-service-package-path }}
+
+    - name: Azure Login
+      uses: azure/login@v2
+      with:
+        creds: ${{ inputs.arm-credentials }}
+
+    - name: 'Run Azure App Service Action'
+      uses: Azure/webapps-deploy@v2
+      id: azure-app-service
+      with:
+        app-name: ${{ inputs.azure-app-service-name }}
+        publish-profile: ${{ inputs.azure-app-service-publish-profile }}
+        package: ${{ inputs.azure-app-service-package-path }}
